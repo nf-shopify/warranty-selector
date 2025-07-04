@@ -29,7 +29,6 @@ const Modal = () => {
         productId: item.productId,
       }))
     );
-    console.log("cartIDs", cartIDs);
   }, [cart]);
 
   useEffect(() => {
@@ -117,7 +116,6 @@ const Modal = () => {
         const variantUUID = cartIDs.find(
           (item) => item.variantId === variantGid
         )?.variantUUID;
-        console.log(variant?.node?.image?.url);
         if (!cartIDs.some((item) => item.variantId === variantGid)) {
           try {
             api.cart.addLineItem(variantId, 1);
@@ -135,7 +133,7 @@ const Modal = () => {
       leftSide: {
         label: variant?.node?.title,
         subtitle: [{ content: variant?.node?.price, color: "TextHighlight" }],
-        image: variant?.node?.image?.url,
+        image: { source: variant?.node?.image?.url },
       },
       rightSide: {
         label: cartIDs.some((item) => item.variantId === variant?.node?.id)
