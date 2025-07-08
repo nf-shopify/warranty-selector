@@ -9,8 +9,8 @@ const TileComponent = () => {
 
   return (
     <Tile
-      title="Shopify"
-      subtitle={enabled ? "Warranty Selector" : "No items in cart"}
+      title="Shopify Warranty Selector"
+      subtitle={enabled ? "Warranty Options" : "No items in cart"}
       onPress={() => {api.action.presentModal()}}
       enabled={enabled}
     />

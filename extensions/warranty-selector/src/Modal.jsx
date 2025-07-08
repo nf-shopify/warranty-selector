@@ -62,7 +62,7 @@ const Modal = () => {
         if (variant?.metafield?.value) {
           setSelectedWarrantyGid(variant?.metafield?.value);
           setSelectedCartItem(variant?.product?.title + " " + variant.title);
-          api.navigation.navigate("Warranty Selection");
+          api.navigation.navigate("Warranty Options");
         } else {
           api.toast.show("No warranties available for this item");
         }
@@ -170,7 +170,7 @@ const Modal = () => {
           <List data={cartListItems} imageDisplayStrategy="always" />
         </ScrollView>
       </Screen>
-      <Screen name="Warranty Selection" title="Warranty Selection">
+      <Screen name="Warranty Options" title="Warranty Options">
         <ScrollView>
           <Section title="Select a warranty"></Section>
           <List data={warrantyListItems} imageDisplayStrategy="always" />
