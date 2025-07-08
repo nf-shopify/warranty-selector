@@ -19,6 +19,7 @@ const Modal = () => {
   const [variantData, setVariantData] = useState([]);
   const [warrantyProductGids, setWarrantyProductGids] = useState([]);
   const [selectedWarrantyGid, setSelectedWarrantyGid] = useState(null);
+  const [selectedCartItem, setSelectedCartItem] = useState(null);
   const [warrantyVariants, setWarrantyVariants] = useState([]);
 
   useEffect(() => {
@@ -60,6 +61,7 @@ const Modal = () => {
       onPress: () => {
         if (variant?.metafield?.value) {
           setSelectedWarrantyGid(variant?.metafield?.value);
+          setSelectedCartItem(variant?.product?.title + " " + variant.title);
           api.navigation.navigate("Warranty Selection");
         } else {
           api.toast.show("No warranties available for this item");
@@ -110,21 +112,27 @@ const Modal = () => {
   function warrantyItemListComponent(variantData) {
     return variantData?.map((variant) => ({
       id: variant?.node?.id,
-      onPress: () => {
+      onPress: async () => {
         const variantGid = variant?.node?.id;
         const variantId = parseInt(variantGid.split("/").pop());
         const variantUUID = cartIDs.find(
           (item) => item.variantId === variantGid
         )?.variantUUID;
-        if (!cartIDs.some((item) => item.variantId === variantGid)) {
+        if (!variantUUID) {
           try {
-            api.cart.addLineItem(variantId, 1);
+            const warrantyUUID = await api.cart.addLineItem(variantId, 1);
+            console.log("warrantyUUID", warrantyUUID);
+            api.cart.addLineItemProperties(warrantyUUID, {
+              Parent_Item: selectedCartItem,
+            });
+            api.toast.show("Warranty added to cart");
           } catch (error) {
             console.error("Failed to add warranty to cart:", error);
           }
         } else {
           try {
             api.cart.removeLineItem(variantUUID);
+            api.toast.show("Warranty removed from cart");
           } catch (error) {
             console.error("Failed to remove warranty from cart:", error);
           }
